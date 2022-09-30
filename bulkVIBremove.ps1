@@ -3,7 +3,7 @@
 #One MUST read README before using this script
 
 
-$hosts = Get-Cluster "NDC Production Cluster" | Get-VMHost
+$hosts = Get-Cluster "Cluster Name" | Get-VMHost
 
 foreach ($vihost in $hosts){
 
