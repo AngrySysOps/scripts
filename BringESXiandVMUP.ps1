@@ -2,8 +2,6 @@
 # Please subscribe to my YouTube channel as thank you :  https://www.youtube.com/@AngryAdmin
 # Follow mw on X:  @AngrySysOps
 
-Connect-VIServer <vCenter_name>
-
 $clusterName = 'your_cluster_name'
 
 # Retrieve the cluster by iterating through datacenters and clusters
@@ -19,18 +17,25 @@ $esxiHosts = Get-VMHost -Location $cluster
 
 foreach ($esxi in $esxiHosts) {
     Write-Host "Processing host: $($esxi.Name)"
-    
-    # Keep checking until the host is no longer in maintenance mode
-    while ($esxi.ConnectionState -eq "Maintenance") {
-        Write-Host "Exiting maintenance mode for host: $($esxi.Name)"
-        Set-VMHost -VMHost $esxi -State "Connected" -Confirm:$false
+
+    # Check if the host is powered on. If not, wait until it is powered on.
+    while ($esxi.PowerState -eq "PoweredOff") {
+        Write-Host "Host $($esxi.Name) is powered off. Waiting for it to power on..."
         Start-Sleep -Seconds 60
-        
-        # Refresh the host object to get the updated state
+        # Refresh the host object for current status.
         $esxi = Get-VMHost -Name $esxi.Name
     }
-    
-    # Check and power on VMs once the host is connected
+
+    # Once the host is powered on, check for maintenance mode.
+    while ($esxi.ConnectionState -eq "Maintenance") {
+        Write-Host "Host $($esxi.Name) is in maintenance mode. Exiting maintenance mode..."
+        Set-VMHost -VMHost $esxi -State "Connected" -Confirm:$false
+        Start-Sleep -Seconds 60
+        # Refresh the host object to get the updated state.
+        $esxi = Get-VMHost -Name $esxi.Name
+    }
+
+    # After ensuring the host is powered on and connected, power on any powered-off VMs.
     $vms = Get-VM -Location $esxi
     foreach ($vm in $vms) {
         if ($vm.PowerState -eq "PoweredOff") {
@@ -39,6 +44,3 @@ foreach ($esxi in $esxiHosts) {
         }
     }
 }
-
-# Disconnecting from vCneter
-Disconnet-Viserver *
