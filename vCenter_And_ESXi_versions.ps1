@@ -1,6 +1,6 @@
 #Author Piotr Tarnawski
 # Angry Admin - www.angrysysops.com 
-# @AngrySysOps (currently susspended) @@TheTechWorldPod - my new podcast
+# @AngrySysOps (currently susspended) @TheTechWorldPod - my new podcast
 
 # --- Step 1: Connect to your vCenter Server ---
 # Replace "vcenter.yourdomain.com" with your vCenter Server's FQDN or IP address
