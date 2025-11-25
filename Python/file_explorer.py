@@ -1,3 +1,7 @@
+#Author Piotr Tarnawski
+#angrysysops.com
+# X: -> @TheTechWorldPod
+
 import os
 
 def scan_folder(path: str) -> None:
