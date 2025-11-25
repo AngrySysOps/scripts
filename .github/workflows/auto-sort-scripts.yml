@@ -1,0 +1,69 @@
+name: Auto-sort scripts by language
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sort-scripts:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure target folders exist
+        run: |
+          mkdir -p PowerShell
+          mkdir -p Bash
+          mkdir -p Python
+
+      - name: Move root-level scripts into language folders
+        shell: bash
+        run: |
+          shopt -s nullglob
+          moved=false
+
+          echo "Scanning for root-level .ps1, .sh, .py files..."
+
+          # PowerShell
+          for f in *.ps1; do
+            if [ -f "$f" ]; then
+              echo "Moving $f -> PowerShell/"
+              git mv "$f" PowerShell/
+              moved=true
+            fi
+          done
+
+          # Bash / shell
+          for f in *.sh; do
+            if [ -f "$f" ]; then
+              echo "Moving $f -> Bash/"
+              git mv "$f" Bash/
+              moved=true
+            fi
+          done
+
+          # Python
+          for f in *.py; do
+            if [ -f "$f" ]; then
+              echo "Moving $f -> Python/"
+              git mv "$f" Python/
+              moved=true
+            fi
+          done
+
+          if [ "$moved" = false ]; then
+            echo "No root-level .ps1 / .sh / .py files found. Nothing to move."
+          fi
+
+      - name: Commit and push changes (if any)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-sort scripts into language folders"
+          branch: ${{ github.ref }}
