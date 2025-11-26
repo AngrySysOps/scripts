@@ -1,6 +1,6 @@
 #This script is a showcase how to interate AI model in Python
 #Subscribe to my Youtube channel @AngryAdmin
-# x: @AngrySysOps
+# x: @TheTechWorldPod
 
 import ollama
 
