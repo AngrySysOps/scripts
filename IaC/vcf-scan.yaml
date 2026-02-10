@@ -1,0 +1,33 @@
+#Piotr Tarnawski
+#Angry Admin 
+# X -> @TheTechWorldPod 
+# Youtube: @AngryAdmin
+name: VCF Readiness Scan
+
+jobs:
+  scan-vcenters:
+    # This label targets our internal Linux VM, not the public cloud
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        python3 -m pip install --user pyvmomi pandas openpyxl matplotlib
+
+    - name: Run VCF Scan
+      env:
+        # Injecting secrets securely at runtime
+        VCENTER_HOST: ${{ secrets.VCENTER_HOST }}
+        VCENTER_USER: ${{ secrets.VCENTER_USER }}
+        VCENTER_PASS: ${{ secrets.VCENTER_PASS }}
+      run: |
+        python3 vcf-ready.py
+
+    - name: Upload Audit Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: VCF-Readiness-Report
+        path: VCF_Readiness_Report.xlsx
