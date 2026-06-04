@@ -1,5 +1,8 @@
 #Modification of William Lam script for Windows PowerShell 5.1-friendly code:
 #Partial code , no variables
+#Full code: https://williamlam.com/2026/06/vcf-9-1-deploying-vcf-management-services-vcfms-to-non-management-network-during-vcf-upgrade.html
+
+
 
 ### DO NOT EDIT BEYOND HERE (WINDOWS POWERSHELL 5.1 COMPATIBLE EDITION) ###
 
