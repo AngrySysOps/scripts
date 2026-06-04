@@ -1,4 +1,5 @@
 #Modification of William Lam script for Windows PowerShell 5.1-friendly code:
+#Partial code , no variables
 
 ### DO NOT EDIT BEYOND HERE (WINDOWS POWERSHELL 5.1 COMPATIBLE EDITION) ###
 
